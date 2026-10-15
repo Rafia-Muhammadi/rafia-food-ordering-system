@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Food | RAFIA Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">RAFIA Admin</a>
+        <div class="nav-links">
+            <a href="menu.html">View Public Menu</a>
+            <a href="add.html" style="color: var(--primary);">Add Food</a>
+            <a href="edit.html">Edit Food</a>
+            <a href="delete.html">Delete Food</a>
+        </div>
+    </nav>
+
+    <!-- Admin Hero Banner (Photo) -->
+    <header class="hero-banner" style="height: 200px;">
+        <h1>Add New Menu Item</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="container form-container" style="margin-top: 20px;">
+            <a href="index.html" class="back-link">← Back to Dashboard</a>
+            
+            <div class="form-group">
+                <label>Food Name:</label>
+                <input type="text" id="food_name" required>
+            </div>
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="category">
+                    <option value="Appetizer">Appetizer</option>
+                    <option value="Main Course">Main Course</option>
+                    <option value="Breads">Breads</option>
+                    <option value="Dessert">Dessert</option>
+                    <option value="Beverage">Beverage</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price (₹):</label>
+                <input type="number" id="price" required>
+            </div>
+            <div class="form-group">
+                <label>Image URL:</label>
+                <input type="url" id="image_url" placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea id="description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Availability:</label>
+                <select id="availability">
+                    <option value="1">Available</option>
+                    <option value="0">Sold Out</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-full" style="width:100%; margin: 15px 0 0 0;" onclick="saveFood()">Save Item</button>
+        </div>
+    </main>
+
+    <!-- Layout Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 RAFIA Food Ordering System. All rights reserved.</p>
+        <p>Designed for Academic Portfolio | Administrator Access Only</p>
+    </footer>
+
+    <script>
+        function saveFood() {
+            const data = {
+                food_name: document.getElementById("food_name").value,
+                category: document.getElementById("category").value,
+                price: document.getElementById("price").value,
+                image_url: document.getElementById("image_url").value,
+                description: document.getElementById("description").value,
+                availability: parseInt(document.getElementById("availability").value)
+            };
+
+            fetch("/foods", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.text())
+            .then(message => {
+                alert(message);
+                location.href = "index.html";
+            });
+        }
+    </script>
+</body>
+</html>

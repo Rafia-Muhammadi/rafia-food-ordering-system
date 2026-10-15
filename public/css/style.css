@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary: #f39c12;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --danger: #e74c3c;
+    --success: #2ecc71;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: var(--dark);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+h1, h2 { text-align: center; color: var(--dark); }
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    color: white;
+    background: var(--primary);
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+.btn:hover { opacity: 0.8; transform: translateY(-2px); }
+.btn-secondary { background: var(--dark); }
+.btn-danger { background: var(--danger); }
+.btn-full { width: calc(100% - 40px); box-sizing: border-box; margin: 15px 20px 0 20px; padding: 12px; font-size: 16px;}
+
+/* Grid & Cards */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 0 0 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--primary);
+    transition: transform 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.card:hover { transform: scale(1.02); }
+
+.food-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.card-header, .category, .desc, .price {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.card-header { display: flex; justify-content: space-between; align-items: center; }
+.card h3 { margin: 0; font-size: 1.2rem; }
+
+.badge { padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: white;}
+.badge.avail { background: var(--success); }
+.badge.unavail { background: var(--danger); }
+
+.category { color: #7f8c8d; font-size: 0.9rem; text-transform: uppercase; margin: 5px 0 10px 0; }
+.desc { font-size: 0.95rem; line-height: 1.5; color: #555; flex-grow: 1; }
+.price { color: var(--primary); font-size: 1.4rem; margin-top: 15px; }
+
+/* Forms */
+.form-container {
+    background: white;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-weight: 600; }
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 600;
+}
+.back-link:hover { color: var(--primary); }
+.empty-state { text-align: center; color: #7f8c8d; font-size: 1.1rem; grid-column: 1 / -1; }
+/* Search Bar */
+.search-container {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 20px;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    font-size: 16px;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(243, 156, 18, 0.3);
+}
+/* Replace body and add structural styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: var(--dark);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- NEW: Navigation Bar --- */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--dark);
+    margin-left: 20px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--primary); }
+
+/* --- NEW: Hero Banner Slider/Header --- */
+.hero-banner {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80') center/cover;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-banner h1 { color: white; font-size: 3.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+.hero-banner p { font-size: 1.2rem; max-width: 600px; margin-bottom: 20px; }
+
+/* Main Container Adjustment */
+.main-content {
+    flex: 1; /* Pushes footer to the bottom */
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- NEW: Layout Footer --- */
+.site-footer {
+    background-color: var(--dark);
+    color: #ecf0f1;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: auto;
+}
+
+.site-footer p { margin: 5px 0; font-size: 0.9rem; color: #bdc3c7; }
+.site-footer a { color: var(--primary); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }

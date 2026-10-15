@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard | RAFIA Food Ordering System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">RAFIA Admin</a>
+        <div class="nav-links">
+            <a href="menu.html">View Public Menu</a>
+            <a href="add.html">Add Food</a>
+            <a href="edit.html">Edit Food</a>
+            <a href="delete.html">Delete Food</a>
+        </div>
+    </nav>
+
+    <!-- Admin Hero Banner (Shorter than the public one) -->
+    <header class="hero-banner" style="height: 250px;">
+        <h1>RAFIA Food Ordering System</h1>
+        <p>Manage your restaurant's inventory, pricing, and availability.</p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="add.html" class="btn">Add New Food</a>
+            <a href="edit.html" class="btn btn-secondary">Edit Food</a>
+            <a href="delete.html" class="btn btn-danger">Delete Food</a>
+            <a href="menu.html" class="btn btn-secondary" style="background-color: #27ae60;">View Public Menu</a>
+        </div>
+
+        <!-- Live Search for Admin -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search database by name or category...">
+        </div>
+
+        <!-- The Admin Menu Grid -->
+        <div class="card-grid" id="foodGrid"></div>
+        
+    </main>
+
+    <!-- Layout Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 RAFIA Food Ordering System. All rights reserved.</p>
+        <p>Designed for Academic Portfolio | Administrator Access Only</p>
+    </footer>
+
+    <script>
+        let allAdminFoods = []; // Store all data globally for the search bar
+
+        // Fetch data from MySQL
+        fetch('/foods')
+            .then(res => res.json())
+            .then(data => {
+                allAdminFoods = data; // Save the raw data
+                renderAdminGrid(allAdminFoods); // Draw the screen initially
+            });
+
+        // Function to draw the cards
+        function renderAdminGrid(foodsArray) {
+            const grid = document.getElementById('foodGrid');
+            
+            if (foodsArray.length === 0) {
+                grid.innerHTML = '<p class="empty-state" style="grid-column: 1 / -1;">No food items in the database.</p>';
+                return;
+            }
+            
+            let html = '';
+            foodsArray.forEach(food => {
+                const badgeClass = food.availability ? 'avail' : 'unavail';
+                const badgeText = food.availability ? 'Available' : 'Sold Out';
+                const imgUrl = food.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
+                
+                html += `
+                    <div class="card">
+                        <img src="${imgUrl}" alt="${food.food_name}" class="food-img">
+                        <div class="card-header">
+                            <h3>${food.food_name}</h3>
+                            <span class="badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <p class="category">${food.category}</p>
+                        <p class="desc">${food.description}</p>
+                        <h4 class="price">₹${food.price}</h4>
+                        <p style="text-align:center; margin-top:10px; font-size: 12px; color: #7f8c8d;">Database ID: ${food.food_id}</p>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        // Live Search Logic
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            const filteredFoods = allAdminFoods.filter(food => 
+                food.food_name.toLowerCase().includes(searchTerm) || 
+                food.category.toLowerCase().includes(searchTerm)
+            );
+            
+            renderAdminGrid(filteredFoods);
+        });
+    </script>
+</body>
+</html>

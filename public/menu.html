@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Menu | RAFIA Food Ordering System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="menu.html" class="nav-logo">RAFIA Food</a>
+        <div class="nav-links">
+            <a href="menu.html" style="color: var(--primary);">Our Menu</a>
+            <a href="index.html">Admin Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+        <h1>RAFIA Signature Menu</h1>
+        <p>Authentic, freshly prepared dishes brought straight to your table.</p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="menu-section">
+        
+        <div class="search-container" style="margin-top: 20px;">
+            <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search for your favorite dishes (e.g. Biryani, Dessert)...">
+        </div>
+
+        <!-- The Menu Grid -->
+        <div class="card-grid" id="menuGrid"></div>
+        
+    </main>
+
+    <!-- Layout Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 RAFIA Food Ordering System. All rights reserved.</p>
+        <p>Designed for Academic Portfolio | <a href="index.html" style="color: var(--primary);">System Administrator Login</a></p>
+    </footer>
+
+    <script>
+        let allAvailableFoods = [];
+
+        // Fetch data from MySQL
+        fetch('/foods')
+            .then(res => res.json())
+            .then(data => {
+                // Customers only see items where availability is 1 (True)
+                allAvailableFoods = data.filter(food => food.availability === 1);
+                renderMenu(allAvailableFoods);
+            });
+
+        // Render Cards with Photos
+        function renderMenu(foodsArray) {
+            const grid = document.getElementById('menuGrid');
+            
+            if (foodsArray.length === 0) {
+                grid.innerHTML = '<p class="empty-state" style="grid-column: 1 / -1;">Our kitchen is preparing new dishes. Check back soon!</p>';
+                return;
+            }
+
+            let html = '';
+            foodsArray.forEach(food => {
+                const imgUrl = food.image_url || 'https://via.placeholder.com/300x200?text=No+Photo+Available';
+                html += `
+                    <div class="card menu-card">
+                        <img src="${imgUrl}" alt="${food.food_name}" class="food-img">
+                        <div class="card-header">
+                            <h3>${food.food_name}</h3>
+                            <h4 class="price">₹${food.price}</h4>
+                        </div>
+                        <p class="category">${food.category}</p>
+                        <p class="desc">${food.description}</p>
+                        <button class="btn btn-full" style="margin-top: auto; background-color: #27ae60;">Add to Cart</button>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        // Live Search Logic
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredFoods = allAvailableFoods.filter(food => 
+                food.food_name.toLowerCase().includes(searchTerm) || 
+                food.category.toLowerCase().includes(searchTerm)
+            );
+            renderMenu(filteredFoods);
+        });
+    </script>
+</body>
+</html>

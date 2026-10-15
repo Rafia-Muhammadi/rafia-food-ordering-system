@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Food | RAFIA Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">RAFIA Admin</a>
+        <div class="nav-links">
+            <a href="menu.html">View Public Menu</a>
+            <a href="add.html">Add Food</a>
+            <a href="edit.html" style="color: var(--primary);">Edit Food</a>
+            <a href="delete.html">Delete Food</a>
+        </div>
+    </nav>
+
+    <!-- Admin Hero Banner (Photo) -->
+    <header class="hero-banner" style="height: 200px;">
+        <h1>Edit Menu Item</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="container form-container" style="margin-top: 20px;">
+            <a href="index.html" class="back-link">← Back to Dashboard</a>
+            
+            <div class="form-group">
+                <label>Select Item to Edit:</label>
+                <select id="foodSelector" onchange="loadFoodData()">
+                    <option value="" disabled selected>-- Select a food item --</option>
+                </select>
+            </div>
+
+            <div id="editForm" style="display: none;">
+                <input type="hidden" id="food_id">
+                <div class="form-group">
+                    <label>Food Name:</label>
+                    <input type="text" id="food_name">
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <select id="category">
+                        <option value="Appetizer">Appetizer</option>
+                        <option value="Main Course">Main Course</option>
+                        <option value="Breads">Breads</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Beverage">Beverage</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price (₹):</label>
+                    <input type="number" id="price">
+                </div>
+                <div class="form-group">
+                    <label>Image URL:</label>
+                    <input type="url" id="image_url">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Availability:</label>
+                    <select id="availability">
+                        <option value="1">Available</option>
+                        <option value="0">Sold Out</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary btn-full" style="width:100%; margin: 15px 0 0 0;" onclick="updateFood()">Update Item</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Layout Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 RAFIA Food Ordering System. All rights reserved.</p>
+        <p>Designed for Academic Portfolio | Administrator Access Only</p>
+    </footer>
+
+    <script>
+        fetch('/foods')
+            .then(res => res.json())
+            .then(data => {
+                const selector = document.getElementById('foodSelector');
+                data.forEach(food => {
+                    const option = document.createElement('option');
+                    option.value = food.food_id;
+                    option.textContent = food.food_name;
+                    selector.appendChild(option);
+                });
+            });
+
+        function loadFoodData() {
+            const id = document.getElementById("foodSelector").value;
+            fetch(`/foods/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    const food = data[0];
+                    document.getElementById("food_id").value = food.food_id;
+                    document.getElementById("food_name").value = food.food_name;
+                    document.getElementById("category").value = food.category;
+                    document.getElementById("price").value = food.price;
+                    document.getElementById("image_url").value = food.image_url || "";
+                    document.getElementById("description").value = food.description;
+                    document.getElementById("availability").value = food.availability;
+                    
+                    document.getElementById("editForm").style.display = "block";
+                });
+        }
+
+        function updateFood() {
+            const id = document.getElementById("food_id").value;
+            const data = {
+                food_name: document.getElementById("food_name").value,
+                category: document.getElementById("category").value,
+                price: document.getElementById("price").value,
+                image_url: document.getElementById("image_url").value,
+                description: document.getElementById("description").value,
+                availability: parseInt(document.getElementById("availability").value)
+            };
+
+            fetch(`/foods/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.text())
+            .then(message => {
+                alert(message);
+                location.href = "index.html";
+            });
+        }
+    </script>
+</body>
+</html>

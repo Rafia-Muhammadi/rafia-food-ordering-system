@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Food | RAFIA Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">RAFIA Admin</a>
+        <div class="nav-links">
+            <a href="menu.html">View Public Menu</a>
+            <a href="add.html">Add Food</a>
+            <a href="edit.html">Edit Food</a>
+            <a href="delete.html" style="color: var(--primary);">Delete Food</a>
+        </div>
+    </nav>
+
+    <!-- Admin Hero Banner (Photo) -->
+    <header class="hero-banner" style="height: 200px;">
+        <h1 style="color: #ffcccc;">Delete Menu Item</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="container form-container" style="margin-top: 20px;">
+            <a href="index.html" class="back-link">← Back to Dashboard</a>
+            
+            <div class="form-group">
+                <label>Select Item to Remove:</label>
+                <select id="foodSelector">
+                    <option value="" disabled selected>-- Select a food item --</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-danger btn-full" style="width:100%; margin: 15px 0 0 0;" onclick="deleteFood()">Permanently Delete Item</button>
+        </div>
+    </main>
+
+    <!-- Layout Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 RAFIA Food Ordering System. All rights reserved.</p>
+        <p>Designed for Academic Portfolio | Administrator Access Only</p>
+    </footer>
+
+    <script>
+        fetch('/foods')
+            .then(res => res.json())
+            .then(data => {
+                const selector = document.getElementById('foodSelector');
+                data.forEach(food => {
+                    const option = document.createElement('option');
+                    option.value = food.food_id;
+                    option.textContent = `${food.food_name} (₹${food.price})`;
+                    selector.appendChild(option);
+                });
+            });
+
+        function deleteFood() {
+            const id = document.getElementById("foodSelector").value;
+            if (!id) return alert("Please select an item to delete.");
+            
+            if(confirm("Are you sure you want to delete this item? This cannot be undone.")) {
+                fetch(`/foods/${id}`, { method: "DELETE" })
+                .then(res => res.text())
+                .then(message => {
+                    alert(message);
+                    location.href = "index.html";
+                });
+            }
+        }
+    </script>
+</body>
+</html>
